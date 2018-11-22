@@ -1,0 +1,56 @@
+{
+  "button": [
+    {
+      "name": "关于我们",
+      "type": "view",
+      "url": "http://www.shhytjs.com/docs/index.html#/about"
+    },
+    {
+      "name": "爱心银行",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "积分排行榜",
+          "url": "http://www.shhytjs.com/docs/index.html#/rank"
+        },
+        {
+          "type": "view",
+          "name": "商品兑换",
+          "url": "http://www.shhytjs.com/docs/index.html#/commodity"
+        },
+        {
+          "type": "view",
+          "name": "爱心商户",
+          "url": "http://www.shhytjs.com/docs/index.html#/map"
+        },
+        {
+          "type": "view",
+          "name": "商户中心",
+          "url": "http://www.shhytjs.com/docs/index.html#/service"
+        }
+      ]
+    },
+    {
+      "name": "志愿者中心",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "活动列表",
+          "url": "http://www.shhytjs.com/docs/index.html#/servelist"
+        },{
+          "type": "view",
+          "name": "注册",
+          "url": "http://www.shhytjs.com/docs/index.html#/register"
+        },{
+          "type": "view",
+          "name": "我的资料",
+          "url": "http://www.shhytjs.com/docs/index.html#/personal"
+        },{
+          "type": "view",
+          "name": "服务站",
+          "url": "http://www.shhytjs.com/docs/index.html#/station"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "menuRoot": {
+    "method": null,
+    "level": 0,
+    "children": [{
+     "cpImg":"/img/chanmping1.216ca406.jpg",
+      "name":"飞利浦多功能吸尘器",
+      "integral":"1000",
+      "surplus":"200"
+    },
+      {
+        "cpImg":"/img/chanmping2.6fe7c91b.jpg",
+        "name":"美的自动微波炉",
+        "integral":"2000",
+        "surplus":"300"
+      },
+      {
+        "cpImg":"/img/chanmping3.0f9035e7.jpg",
+        "name":"惠而浦电风扇",
+        "integral":"1000",
+        "surplus":"100"
+      },
+      {
+        "cpImg":"/img/chanmping4.97d0df96.jpg",
+        "name":"海尔全自动洗衣机",
+        "integral":"7000",
+        "surplus":"1000"
+      },
+      {
+        "cpImg":"/img/chanmping5.1629a818.jpg",
+        "name":"黄河牌曲屏4K超清电视机",
+        "integral":"9000",
+        "surplus":"800"
+      },
+      {
+        "cpImg":"/img/chanmping6.07666edf.jpg",
+        "name":"海尔空调SKR1255s654",
+        "integral":"20000",
+        "surplus":"2000"
+      },
+      {
+        "cpImg":"/img/chanmping7.c3322aa8.jpg",
+        "name":"联想超级游戏台式电脑主机",
+        "integral":"50000",
+        "surplus":"3500"
+      }]
+  },
+  "error": false,
+  "message": ""
+}
