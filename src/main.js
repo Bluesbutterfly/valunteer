@@ -1,6 +1,7 @@
 import './common/rem';
 import Vue from 'vue';
 import App from './App.vue';
+import VueAMap from 'vue-amap';
 import { router } from './router';
 import axios from 'axios';
 import proxy from 'http-proxy-middleware'
@@ -8,6 +9,26 @@ import VueCookies from 'vue-cookies'
 import moment from 'moment'
 import store from 'store'
 
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+    // 高德key
+    key: '445aa0fada938fa756d8a9c9e7996531',
+    // 插件集合 （插件按需引入）
+    plugin: [
+        "AMap.Autocomplete", //输入提示插件
+        "AMap.PlaceSearch", //POI搜索插件
+        "AMap.Scale", //右下角缩略图插件 比例尺
+        "AMap.OverView", //地图鹰眼插件
+        "AMap.ToolBar", //地图工具条
+        "AMap.MapType", //类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+        "AMap.PolyEditor", //编辑 折线多，边形
+        "AMap.CircleEditor", //圆形编辑器插件
+        "AMap.Geolocation", //定位控件，用来获取和展示用户主机所在的经纬度位置
+        "AMap.CloudDataSearch",//高德云图
+        "AMap.ToolBar"
+    ],
+    uiVersion: '1.0.11' // 版本号
+});
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.timeout = 10000
 // axios.defaults.baseURL = '/res'

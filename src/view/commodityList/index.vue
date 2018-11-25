@@ -4,6 +4,25 @@
             <!--title="商品列表"-->
     <!--/>-->
   <div id="list-content">
+    <!--分类查询-->
+    <div class="sort-search">
+      <van-cell-group>
+        <van-search
+                v-model="value"
+                placeholder="请输入搜索关键词"
+                show-action
+                @search="onSearch"
+                @cancel="onCancels"
+        />
+      </van-cell-group>
+      <div class="sort-search-contant">
+        <div class="search-item" @click="sortSearch(index)" v-for="(item,index) in sortList">
+          {{ item }}
+          <i class="iconfont icon-xialajiantou"></i>
+        </div>
+        <van-picker :columns="columns" show-toolbar v-if="columnsShow" @cancel="onCancel" @confirm="onConfirm" class="sort-select"/>
+      </div>
+    </div>
     <van-pull-refresh
             class="val-loading-contain"
             v-model="isLoading"
@@ -33,14 +52,41 @@
     <div class="van-listimg-btn" @click="targetTop">
       <img src="../../static/images/icon_shangjiantou.png">
     </div>
+      <el-amap vid="amap" :plugin="plugin" :amap-manager="amapManager" class="amap-demo" :center="center" :zoom="zoom" style="display: none">
+      </el-amap>
   </div>
   </div>
 </template>
 
 <script>
-import { Row, Col, Icon, Cell, CellGroup,NavBar,Card,List,PullRefresh } from 'vant';
+import { Row, Col, Icon, Cell, CellGroup,NavBar,Card,List,Field,PullRefresh,Search,Picker } from 'vant';
 import qs from 'qs'
-
+import Vue from 'vue'
+import VueAMap from 'vue-amap';
+import '../../static/font_934567_8ze40dr96e7/iconfont.css'
+Vue.use(VueAMap);
+// 初始化vue-amap
+let amapManager = new VueAMap.AMapManager();
+// let map = new VueAMap.Map()
+VueAMap.initAMapApiLoader({
+    // 高德key
+    key: '445aa0fada938fa756d8a9c9e7996531',
+    // 插件集合 （插件按需引入）
+    plugin: [
+        "AMap.Autocomplete", //输入提示插件
+        "AMap.PlaceSearch", //POI搜索插件
+        "AMap.Scale", //右下角缩略图插件 比例尺
+        "AMap.OverView", //地图鹰眼插件
+        "AMap.ToolBar", //地图工具条
+        "AMap.MapType", //类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+        "AMap.PolyEditor", //编辑 折线多，边形
+        "AMap.CircleEditor", //圆形编辑器插件
+        "AMap.Geolocation", //定位控件，用来获取和展示用户主机所在的经纬度位置
+        "AMap.CloudDataSearch",//高德云图
+        "AMap.ToolBar"
+    ],
+    uiVersion: '1.0.11' // 版本号
+});
 export default {
   components: {
     [Row.name]: Row,
@@ -49,29 +95,64 @@ export default {
     [Cell.name]: Cell,
     [List.name]: List,
     [Card.name]: Card,
+    [Field.name]: Field,
     [NavBar.name]: NavBar,
+    [Search.name]: Search,
+    [Picker.name]: Picker,
     [CellGroup.name]: CellGroup,
     [PullRefresh.name]: PullRefresh
   },
   data() {
+      let self = this
       return {
           list: [],
+          value:'',
+          zoom: 15,
           loading: false,
           finished: false,
           isLoading: false,   //是否处于下拉刷新状态
           rows:6,//每页显示的个数
           pageNumber: 1,//当前显示页数
-          totalPage: 0
+          totalPage: 0,
+          columns: [],
+          columnsShow:false,
+          sortList:["分类","附近","排序"],
+          center: [121.59996, 31.197646],
+          lng: null,
+          lat: null,
+          categoryId:null,
+          amapManager,
+          loaded: false,
+          plugin: [{
+              pName: 'Geolocation',
+              events: {
+                  init(o) {
+                      // o 是高德地图定位插件实例
+                      o.getCurrentPosition((status, result) => {
+                          console.log(status)
+                          if (result && result.position) {
+                              self.lng = result.position.lng;
+                              self.lat = result.position.lat;
+                              self.center = [self.lng, self.lat];
+                              self.loaded = true;
+                              self.$nextTick();
+                          }else {
+                              alert("定位失败")
+                          }
+                      });
+                  }
+              }
+          }]
       };
   },
 
   methods: {
-      init() {
+      init(pushObj) {
           let data = {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+          this.$axios.post("/res/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.goodsList;
@@ -96,7 +177,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/res/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
@@ -121,6 +202,61 @@ export default {
       targetTop() {
           document.body.scrollTop = 0
           document.documentElement.scrollTop = 0
+      },
+      sortSearch(index){
+          console.log(this.lat)
+        this.columnsShow = true
+        let distance=["不限","1公里","3公里","5公里","10公里","20公里"]
+        let sortList=["不限","距离","积分"]
+        this.$axios.post("/res/shop/category",).then(res=>{
+            console.log(res)
+            let category = []
+            this.columns = []
+            for (var i in res.data.resData) {
+                this.categoryId = res.data.resData[i].id
+                category.push(res.data.resData[i].categoryName)
+            }
+            switch (index){
+                case 0:
+                    this.columns = category
+                    break;
+                case 1:
+                    this.columns = distance
+                    break;
+                case 2:
+                    this.columns = sortList
+                    break;
+            }
+        })
+      },
+      // 选择搜索排序
+      onConfirm(value,index) {
+          self.list = []
+          let pushObj =
+              {
+                  "name":value,
+                  "lat":this.lat,
+                  "lng":this.lng
+              }
+          this.init(pushObj)
+          this.columnsShow = false
+      },
+      // 取消
+      onCancel(){
+          this.columnsShow = false
+      },
+      onSearch(){
+          self.list = []
+          let pushObj =
+              {
+                  "name":this.value,
+                  "lat":this.lat,
+                  "lng":this.lng
+              }
+          this.init(pushObj)
+      },
+      onCancels(){
+        return false
       }
   },
     mounted(){
@@ -258,5 +394,23 @@ export default {
       }
     }
   }
+}
+    /*分类查询*/
+.sort-search-contant{
+    height: .7rem;
+    line-height: .7rem;
+    display: flex;
+    justify-content: space-around;
+    color: #666;
+    margin-bottom: .3rem;
+    background: #fff;
+    position: relative;
+}
+.sort-select{
+    position: absolute;
+    width: 100%;
+    top: .8rem;
+    left: 0;
+    z-index: 999;
 }
 </style>

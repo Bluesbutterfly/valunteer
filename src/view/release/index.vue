@@ -80,18 +80,22 @@
             <div>
                 请上传照片
             </div>
-            <img :src="imgUrls" id="set-img" class="img-images" v-if="imgUrls">
+            <!--<img :src="imgUrls" id="set-img" class="img-images" v-if="imgUrls">-->
             <div class="van-uploader-img">
-                <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg,image/jpg" @change="update"/>
-                <div class="subimg">
-                    <img src="../../static/images/add.png">
-                    <div>点击上传图片</div>
-                </div>
-                <!--<van-uploader :after-read="onRead" id="file">-->
-                    <!--&lt;!&ndash;<van-icon name="photograph" />&ndash;&gt;-->
+                <van-uploader :after-read="update">
+                    <div class="van-upload-border" v-if="showClick">
+                        <div class="subimg">
+                            <img src="../../static/images/add.png">
+                            <div>点击上传图片</div>
+                        </div>
+                    </div>
+                    <img :src="imgUrls" v-if="imgUrls">
+                </van-uploader>
+                <!--<input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg,image/jpg" @change="update"/>-->
+                <!--<div class="subimg">-->
                     <!--<img src="../../static/images/add.png">-->
                     <!--<div>点击上传图片</div>-->
-                <!--</van-uploader>-->
+                <!--</div>-->
             </div>
         </van-cell-group>
         <div class="van-space-wite"></div>
@@ -138,6 +142,7 @@
                 address:null,
                 peopleCount:null,
                 file:null,
+                showClick:true,
                 zheng:null,
                 start:null,
                 pictureId:0,
@@ -150,7 +155,9 @@
 
         methods: {
             update(e){
-                let file = e.target.files[0];
+                this.showClick = false
+                // this.imgUrls = e.content
+                let file = e.file;
                 let param = new FormData(); //创建form对象
                 param.append('file',file,file.name);//通过append向form对象添加数据
                 param.append('chunk','0');//添加form表单中其他数据
@@ -169,11 +176,6 @@
                     let picId = res.data.resData.pictureId
                     sessionStorage.pictureId = picId
                 })
-                console.log(sessionStorage.pictureId)
-                // this.axios.post('/api/upload/image',param,config)
-                //     .then(response=>{
-                //         console.log(response.data);
-                //     })
             },
             sureGift() {
                 sessionStorage.stationName = this.stationName
@@ -313,11 +315,25 @@
         &-uploader-img{
             width: 1.64rem;
             height: 1.4rem;
-            border: .03rem dashed #ccc;
             text-align: center;
-            img{
-                width: .56rem;
-                padding-top: .2rem;
+            .van-upload-border{
+                width: 100%;
+                height: 100%;
+                border: .03rem dashed #ccc;
+            }
+            .van-uploader{
+                /deep/
+                img{
+                    width: 100%;
+                    height: 100%;
+                    padding: 0;
+                }
+            }
+            .subimg{
+                img{
+                    width: .56rem;
+                    padding-top: .2rem;
+                }
             }
             input{
                 width: 100%;
