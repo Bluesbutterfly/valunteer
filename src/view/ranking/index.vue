@@ -6,7 +6,7 @@
         <van-cell-group>
             <van-row type="flex" justify="space-around" class="van-sort-who" v-for="(item,index) in forwardList">
                 <van-col>
-                    <img src="../../static/images/u=2537627520,3119182571&fm=27&gp=0.jpg">
+                    <img :src="'http://47.99.140.207:8081/'+item[1].picture">
                     <div>
                         <img src="../../static/images/icon_yingpai.png">
                     </div>
@@ -16,7 +16,7 @@
                     </div>
                 </van-col>
                 <van-col>
-                    <img src="../../static/images/u=3310243611,2272020729&fm=27&gp=0.jpg">
+                    <img :src="'http://47.99.140.207:8081/'+item[0].picture">
                     <div>
                         <img src="../../static/images/icon_jinpai.png">
                     </div>
@@ -26,7 +26,7 @@
                     </div>
                 </van-col>
                 <van-col>
-                    <img src="../../static/images/u=456540401,245543726&fm=200&gp=0.jpg">
+                    <img :src="'http://47.99.140.207:8081/'+item[2].picture">
                     <div>
                         <img src="../../static/images/icon_tongpai.png">
                     </div>
@@ -40,7 +40,7 @@
                 <van-cell>
                     <div>{{ index+1 }}</div>
                     <div>
-                        <img src="../../static/images/u=456540401,245543726&fm=200&gp=0.jpg">
+                        <img :src="'http://47.99.140.207:8081/'+item.picture">
                     </div>
                     <div>
                         {{ item.realName }}

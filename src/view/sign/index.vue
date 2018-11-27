@@ -39,7 +39,7 @@
                   v-model="doing"
           />
           <van-field
-                  label="住址"
+                  label="居住地址"
                   placeholder="请输入"
                   v-model="address"
           />
@@ -57,6 +57,36 @@
                   label="服务时长（小时）"
                   placeholder="请输入"
                   v-model="timeLength"
+          />
+          <van-field
+                  label="手机"
+                  placeholder="请输入"
+                  v-model="tel"
+          />
+          <van-field
+                  label="政治面貌"
+                  placeholder="请输入"
+                  v-model="politicsStatus"
+          />
+          <van-field
+                  label="民族"
+                  placeholder="请输入"
+                  v-model="nation"
+          />
+          <van-field
+                  label="最高学历"
+                  placeholder="请输入"
+                  v-model="highestEducation"
+          />
+          <van-field
+                  label="从业状况"
+                  placeholder="请输入"
+                  v-model="workingConditions"
+          />
+          <van-field
+                  label="服务意向"
+                  placeholder="请输入"
+                  v-model="serviceIntention"
           />
         </van-row>
       </van-cell-group>
@@ -104,6 +134,11 @@
                 age:"",
                 idCard:"",
                 tel:"",
+                politicsStatus:"",
+                nation:"",
+                highestEducation:"",
+                workingConditions:"",
+                serviceIntention:"",
                 doing:"",
                 address:"",
                 workAdress:"",
@@ -146,7 +181,13 @@
                     address:this.address,
                     workUnit:this.workAdress,
                     volunteerNo:this.userNum,
-                    workHours:this.timeLength
+                    workHours:this.timeLength,
+                    Phone:this.tel,
+                    politicsStatus:this.politicsStatus,
+                    nation:this.nation,
+                    highestEducation:this.highestEducation,
+                    workingConditions:this.workingConditions,
+                    serviceIntention:this.serviceIntention
                 }
                 // let getMsg = this.$cookies.get("getMsg")
                 if (setMsg.realName == ""){

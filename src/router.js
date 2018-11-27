@@ -93,6 +93,13 @@ const routes = [
         }
     },
     {
+        name: 'shopList',
+        component: () => import('./view/shopList'),
+        meta: {
+            title: '商品兑换'
+        }
+    },
+    {
         name: 'commodityDetails',
         component: () => import('./view/commDetails'),
         meta: {

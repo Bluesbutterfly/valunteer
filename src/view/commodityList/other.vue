@@ -16,7 +16,7 @@
         />
       </van-cell-group>
       <div class="sort-search-contant">
-        <div class="search-item" @click="sortSearch(index)" v-for="(item,index) in sortList">
+        <div class="search-item" @click="sortSearch(other)" v-for="(item,index) in sortList">
           {{ item }}
           <i class="iconfont icon-xialajiantou"></i>
         </div>
@@ -33,7 +33,7 @@
               :finished="finished"
               @load="onLoad"
       >
-        <div v-for="(item,index) in list" class="van-item-list" @click="details(index)" :data-id="item.id">
+        <div v-for="(item,index) in list" class="van-item-list" @click="details(other)" :data-id="item.id">
           <!--商品图片-->
           <van-cell class="van-commodity-img">
             <img :src="'http://47.99.140.207:8081/'+item.picture">
@@ -42,8 +42,8 @@
           <van-cell class="van-commodity-more">
             <div :title="item.presentation">{{ item.goodsName }}</div>
             <div>
-              <div>商户名称：<span>{{ item.shopName }}</span></div>
-              <div :title="item.presentation">{{ item.presentation }}</div>
+              <div>积分：<span>{{ item.price }}</span></div>
+              <div>剩余：<span>{{ item.inventory }}</span></div>
             </div>
           </van-cell>
         </div>
@@ -108,7 +108,6 @@ export default {
           list: [],
           value:'',
           zoom: 15,
-          order:0,
           loading: false,
           finished: false,
           isLoading: false,   //是否处于下拉刷新状态
@@ -153,10 +152,10 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
+          this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
-              let datas = serve.shopList;
+              let datas = serve.goodsList;
               self.list = datas;
               self.totalPage = res.data.resData.count/this.rows;
               self.isLoading = false; //关闭下拉刷新效果
@@ -178,11 +177,11 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
-                  let datas = serve.shopList;
+                  let datas = serve.goodsList;
                   self.list = self.list.concat(datas);
                   self.totalPage = res.data.resData.count/this.rows;
                   self.loading = false; //关闭下拉刷新效果
@@ -195,9 +194,9 @@ export default {
       },
       // 进入购买详情的页面
       details(index) {
-          sessionStorage.shopIndexId = this.list[index].id
-          sessionStorage.shopPic = 'http://47.99.140.207:8081/'+this.list[index].picture
-          this.$router.push({name:'shopList',query:this.list[index].id})
+          sessionStorage.shopIndexId = this.list[other].id
+          sessionStorage.shopPic = 'http://47.99.140.207:8081/'+this.list[other].picture
+          this.$router.push({name:'commodityDetails',query:this.list[other].id})
       },
       // 返回顶部
       targetTop() {
@@ -217,7 +216,7 @@ export default {
                 this.categoryId = res.data.resData[i].id
                 category.push(res.data.resData[i].categoryName)
             }
-            switch (index){
+            switch (other){
                 case 0:
                     this.columns = category
                     break;
@@ -236,7 +235,6 @@ export default {
           let pushObj =
               {
                   "name":value,
-                  "order":this.order,
                   "lat":this.lat,
                   "lng":this.lng
               }
@@ -278,17 +276,11 @@ export default {
     color: inherit;
     font-size: .28rem;
   }
-  &-list{
-    /deep/
-    .van-item-list{
-      display: flex;
-    }
-  }
 }
 .van-cell{
   font-size: .28rem;
   line-height: .48rem;
-  padding: 10px;
+  padding: .2rem .3rem;
 }
 .user {
   &-poster {
@@ -318,18 +310,15 @@ export default {
     overflow: hidden;
   }
   /deep/ &-item-list{
-    width: 100%;
+    float: left;
+    width: 50%;
     padding: .2rem .2rem 0 .2rem;
     box-sizing: border-box;
-    .van-cell:nth-child(even){
-      padding-left: 0;
-    }
     .van-commodity-img{
       img{
-        width: 80%;
-        height: 2rem;
-        margin: 0 auto;
-        object-fit: cover;
+        width: 100%;
+        height: 3rem;
+        object-fit: contain;
       }
     }
     .van-commodity-more{
@@ -342,18 +331,20 @@ export default {
                 white-space: nowrap;
             }
             >div:last-child{
-                font-size: .25rem;
-                color: #666;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
+                display: flex;
+                justify-content: space-between;
+                font-size: .2rem;
+                color: #999;
+                >div:first-child{
+                    color: #FD4242;
+                }
             }
         }
     }
   }
-  /*&-item-list:nth-child(even){*/
-      /*padding-left: 0;*/
-  /*}*/
+  &-item-list:nth-child(even){
+      padding-left: 0;
+  }
   &-listimg-btn{
       position: fixed;
       right: .64rem;
