@@ -152,7 +152,7 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
+          this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj,"shopId":sessionStorage.shopIndexId })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.goodsList;
@@ -177,7 +177,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/api/goods/goodsList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,"shopId":sessionStorage.shopIndexId })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
