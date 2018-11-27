@@ -13,7 +13,9 @@
                 show-action
                 @search="onSearch"
                 @cancel="onCancels"
-        />
+        >
+          <div slot="action" @click="onSearch">搜索</div>
+        </van-search>
       </van-cell-group>
       <div class="sort-search-contant">
         <div class="search-item" @click="sortSearch(index)" v-for="(item,index) in sortList">
