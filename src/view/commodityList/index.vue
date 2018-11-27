@@ -209,7 +209,7 @@ export default {
         this.columnsShow = true
         let distance=["不限","1公里","3公里","5公里","10公里","20公里"]
         let sortList=["不限","距离","积分"]
-        this.$axios.post("/api/shop/category",).then(res=>{
+        this.$axios.post("/res/shop/category",).then(res=>{
             console.log(res)
             let category = []
             this.columns = []
