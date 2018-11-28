@@ -22,7 +22,9 @@
           {{ item }}
           <i class="iconfont icon-xialajiantou"></i>
         </div>
-        <van-picker :columns="columns" show-toolbar v-if="columnsShow" @cancel="onCancel" @confirm="onConfirm" class="sort-select"/>
+     <van-popup v-model="show" position="center" :overlay="true">
+          <van-picker :columns="columns" show-toolbar v-if="columnsShow" @cancel="onCancel" @confirm="onConfirm" class="sort-select"/>
+     </van-popup>
       </div>
     </div>
     <van-pull-refresh
@@ -61,7 +63,7 @@
 </template>
 
 <script>
-import { Row, Col, Icon, Cell, CellGroup,NavBar,Card,List,Field,PullRefresh,Search,Picker } from 'vant';
+import { Row, Col, Icon, Cell, CellGroup,NavBar,Card,List,Field,PullRefresh,Search,Picker,Popup } from 'vant';
 import qs from 'qs'
 import Vue from 'vue'
 import VueAMap from 'vue-amap';
@@ -101,6 +103,7 @@ export default {
     [NavBar.name]: NavBar,
     [Search.name]: Search,
     [Picker.name]: Picker,
+    [Popup.name]: Popup,
     [CellGroup.name]: CellGroup,
     [PullRefresh.name]: PullRefresh
   },
@@ -111,6 +114,7 @@ export default {
           value:'',
           zoom: 15,
           order:0,
+          show:false,
           loading: false,
           finished: false,
           isLoading: false,   //是否处于下拉刷新状态
@@ -230,10 +234,12 @@ export default {
                     this.columns = sortList
                     break;
             }
+            this.show = true
         })
       },
       // 选择搜索排序
       onConfirm(value,index) {
+          this.show = false
           self.list = []
           let pushObj =
               {
@@ -248,6 +254,7 @@ export default {
       // 取消
       onCancel(){
           this.columnsShow = false
+          this.show = false
       },
       onSearch(){
           self.list = []
@@ -417,12 +424,5 @@ export default {
     margin-bottom: .3rem;
     background: #fff;
     position: relative;
-}
-.sort-select{
-    position: absolute;
-    width: 100%;
-    top: .8rem;
-    left: 0;
-    z-index: 999;
 }
 </style>
