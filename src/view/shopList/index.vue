@@ -115,6 +115,7 @@ export default {
           zoom: 15,
           show:false,
           loading: false,
+          changeIndex:0,
           finished: false,
           isLoading: false,   //是否处于下拉刷新状态
           rows:6,//每页显示的个数
@@ -233,11 +234,13 @@ export default {
                     this.columns = sortList
                     break;
             }
+            this.changeIndex = index
             this.show = true
         })
       },
       // 选择搜索排序
       onConfirm(value,index) {
+          let i = this.changeIndex
           this.show = false
           self.list = []
           let pushObj =
@@ -247,6 +250,7 @@ export default {
                   "lng":this.lng
               }
           this.init(pushObj)
+          this.sortList[i] = value
           this.columnsShow = false
       },
       // 取消

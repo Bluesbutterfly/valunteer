@@ -46,7 +46,7 @@
           <van-cell class="van-commodity-more">
             <div :title="item.presentation">{{ item.goodsName }}</div>
             <div class="intro-shopmer">
-              <div>商户名称：<span>{{ item.shopName }}</span></div>
+              <div class="shopName">商户名称：<span>{{ item.shopName }}</span></div>
               <div :title="item.presentation">{{ item.presentation }}</div>
             </div>
           </van-cell>
@@ -116,6 +116,7 @@ export default {
           order:0,
           show:false,
           loading: false,
+          changeIndex:0,
           finished: false,
           isLoading: false,   //是否处于下拉刷新状态
           rows:6,//每页显示的个数
@@ -159,7 +160,7 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
+          this.$axios.post("/res/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.shopList;
@@ -184,7 +185,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/res/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
@@ -211,11 +212,10 @@ export default {
           document.documentElement.scrollTop = 0
       },
       sortSearch(index){
-          console.log(this.lat)
         this.columnsShow = true
         let distance=["不限","1公里","3公里","5公里","10公里","20公里"]
         let sortList=["不限","距离","积分"]
-        this.$axios.post("/api/shop/category",).then(res=>{
+        this.$axios.post("/res/shop/category",).then(res=>{
             console.log(res)
             let category = []
             this.columns = []
@@ -234,11 +234,13 @@ export default {
                     this.columns = sortList
                     break;
             }
+            this.changeIndex = index
             this.show = true
         })
       },
       // 选择搜索排序
       onConfirm(value,index) {
+          let i = this.changeIndex
           this.show = false
           self.list = []
           let pushObj =
@@ -249,6 +251,7 @@ export default {
                   "lng":this.lng
               }
           this.init(pushObj)
+          this.sortList[i] = value
           this.columnsShow = false
       },
       // 取消
@@ -347,18 +350,15 @@ export default {
             >div:first-child{
                 font-size: .24rem;
                 color: #666;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
             }
             >div:last-child{
                 font-size: .25rem;
                 color: #666;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
             }
         }
+      .shopName{
+        font-weight: 600;
+      }
     }
   }
   /*&-item-list:nth-child(even){*/
