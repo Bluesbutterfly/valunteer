@@ -202,9 +202,7 @@ export default {
       },
       // 进入购买详情的页面
       details(index) {
-          sessionStorage.shopIndexId = this.list[index].id
-          sessionStorage.shopPic = 'http://47.99.140.207:8081/'+this.list[index].picture
-          this.$router.push({name:'shopList',query:this.list[index].id})
+          this.$router.push({name:'shopList',query:{shopObj:this.list[index].id}})
       },
       // 返回顶部
       targetTop() {
@@ -357,8 +355,9 @@ export default {
             }
         }
       .shopName{
-        font-weight: 600;
-      }
+         font-weight: 600;
+         font-size: .33rem;
+       }
     }
   }
   /*&-item-list:nth-child(even){*/

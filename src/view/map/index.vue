@@ -88,6 +88,7 @@
               lat: 0,
               nlng: 0,
               nlat: 0,
+              shopId:0,
               names:null,
               address:null,
               distance:null,
@@ -101,36 +102,6 @@
                   citylimit: true
               },
               plugin: [
-          //         {
-          //         enableHighAccuracy: true,//是否使用高精度定位，默认:true
-          //         timeout: 100,          //超过10秒后停止定位，默认：无穷大
-          //         maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-          //         convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-          //         showButton: true,        //显示定位按钮，默认：true
-          //         buttonPosition: 'RB',    //定位按钮停靠位置，默认：'LB'，左下角
-          //         showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
-          //         showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
-          //         panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
-          //         zoomToAccuracy:true,//定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：f
-          //         extensions:'all',
-          //         pName: 'Geolocation',
-          //         events: {
-          //             init(o) {
-          //                 // console.log(o)
-          //                 // o 是高德地图定位插件实例
-          //                 o.getCurrentPosition((status, result) => {
-          //                     console.log(result)
-          //                     if (result && result.position) {
-          //                         self.lng = result.position.lng;
-          //                         self.lat = result.position.lat;
-          //                         self.center = [self.lng, self.lat];
-          //                         self.loaded = true;
-          //                         self.$nextTick();
-          //                     }
-          //                 });
-          //             }
-          //         }
-          // }
           ,{
                   // key: 'ef670a4970a138af8a2fba72cbae3594',
                   pageSize: 10,
@@ -153,10 +124,6 @@
                               AMap.event.addListener(cloudDataLayer, 'click', function(result) {
                                   let clouddata = result.data;
                                   console.log(clouddata)
-                                  // sessionStorage.mapCenter = [clouddata._location.lng,clouddata._location.lat]
-                                  sessionStorage.mapLngs = clouddata._location.lng
-                                  sessionStorage.mapLats = clouddata._location.lat
-                                  // sessionStorage.mapNames = self.names
                                   self.show = true
                                   let cpoint = [clouddata._location.lng,clouddata._location.lat],
                                       dis = Math.round(AMap.GeometryUtil.distance(self.center, cpoint));
@@ -167,7 +134,8 @@
                                   }
                                   self.names = clouddata._name
                                   self.address = clouddata._address
-                                  self.$axios.post("/api/shop/shopDetail",qs.stringify({ "id":clouddata.shop_id })).then(res=>{
+                                  self.shopId = clouddata.shop_id
+                                  self.$axios.post("/res/shop/shopDetail",qs.stringify({ "id":clouddata.shop_id })).then(res=>{
                                       let numMarker = res.data.resData
                                       self.mapHour = numMarker.businessHours
                                       if (typeof numMarker.image != "object"){
@@ -175,9 +143,6 @@
                                       }else {
                                           self.centerImg = 'http://47.99.140.207:8081/'+numMarker.image.pictureAddress
                                       }
-                                      sessionStorage.centerImg = self.centerImg
-                                      sessionStorage.mapHour = self.mapHour
-                                      sessionStorage.shop_id= clouddata.shop_id
                                   })
                               //     var infoWindow = new AMap.InfoWindow({
                               //         content: "<h3><font>" +
@@ -228,7 +193,7 @@
               sessionStorage.mapValue = this.value
               sessionStorage.mapLng = this.lng
               sessionStorage.mapLat = this.lat
-              this.$router.push({ name: 'merchat'})
+              this.$router.push({ name: 'merchat',query:{list:this.shopId}})
           }
       }
   }

@@ -159,7 +159,7 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/goods/shopGoods",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
+          this.$axios.post("/res/goods/shopGoods",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.goodsList;
@@ -184,7 +184,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/goods/shopGoods",qs.stringify({ "page":self.pageNumber,"rows":this.rows,"shopId":sessionStorage.shopIndexId })).then(res=>{
+              this.$axios.post("/res/goods/shopGoods",qs.stringify({ "page":self.pageNumber,"rows":this.rows,"shopId":this.$route.query.shopObj })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
@@ -201,9 +201,7 @@ export default {
       },
       // 进入购买详情的页面
       details(index) {
-          sessionStorage.shopIndexId = this.list[index].id
-          sessionStorage.shopPic = 'http://47.99.140.207:8081/'+this.list[index].picture
-          this.$router.push({name:'commodityDetails',query:this.list[index].id})
+          this.$router.push({name:'merchat',query:{list:this.$route.query.shopObj}})
       },
       // 返回顶部
       targetTop() {
@@ -215,7 +213,7 @@ export default {
         this.columnsShow = true
         let distance=["不限","1公里","3公里","5公里","10公里","20公里"]
         let sortList=["不限","距离","积分"]
-        this.$axios.post("/api/shop/category",).then(res=>{
+        this.$axios.post("/res/shop/category",).then(res=>{
             console.log(res)
             let category = []
             this.columns = []

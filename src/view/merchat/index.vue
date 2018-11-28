@@ -200,11 +200,12 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/shop/myGoods",qs.stringify({ "id":sessionStorage._id,"page":self.pageNumber,"rows":this.rows })).then(res=>{
+          this.$axios.post("/res/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.myGoodsList;
               self.list = datas;
+              console.log(self.list)
               self.totalPage = res.data.resData.goodsCount/this.rows;
               self.isLoading = false; //关闭下拉刷新效果
           }).catch(err=>{
@@ -227,7 +228,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/shop/myGoods",qs.stringify({ "id":sessionStorage.shop_id,"page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/res/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   this.loadingText = "加载中"
                   let serve = res.data.resData
