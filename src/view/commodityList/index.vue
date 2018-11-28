@@ -43,7 +43,7 @@
           <!--商品详情-->
           <van-cell class="van-commodity-more">
             <div :title="item.presentation">{{ item.goodsName }}</div>
-            <div>
+            <div class="intro-shopmer">
               <div>商户名称：<span>{{ item.shopName }}</span></div>
               <div :title="item.presentation">{{ item.presentation }}</div>
             </div>
@@ -155,7 +155,7 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
+          this.$axios.post("/res/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows,pushObj })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.shopList;
@@ -180,7 +180,7 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/api/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/res/shop/shopList",qs.stringify({ "page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
@@ -327,8 +327,9 @@ export default {
       padding-left: 0;
     }
     .van-commodity-img{
+      width: 80%;
       img{
-        width: 80%;
+        width: 100%;
         height: 2rem;
         margin: 0 auto;
         object-fit: cover;
