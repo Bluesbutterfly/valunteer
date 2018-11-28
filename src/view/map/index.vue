@@ -135,7 +135,7 @@
                                   self.names = clouddata._name
                                   self.address = clouddata._address
                                   self.shopId = clouddata.shop_id
-                                  self.$axios.post("/res/shop/shopDetail",qs.stringify({ "id":clouddata.shop_id })).then(res=>{
+                                  self.$axios.post("/api/shop/shopDetail",qs.stringify({ "id":clouddata.shop_id })).then(res=>{
                                       let numMarker = res.data.resData
                                       self.mapHour = numMarker.businessHours
                                       if (typeof numMarker.image != "object"){

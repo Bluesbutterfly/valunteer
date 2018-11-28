@@ -21,13 +21,13 @@
     </div>
     <div v-if="showMain">
       <van-cell-group>
-        <img class="user-poster" :src="rootPic">
+        <img class="user-poster" :src="'http://47.99.140.207:8081/'+mapList.picture">
         <div class="van-user">
           <div class="van-shoping-name">
-            {{ mapName }}
+            {{ mapList.shopName }}
           </div>
           <div>
-            {{ mapDistance }}<span>{{ mapAddress }}</span>
+            {{ mapList.mapDistance }}<span>{{ mapList.address }}</span>
           </div>
           <div>
             <van-rate
@@ -41,7 +41,7 @@
             <!--<span>2000</span>人去过-->
           </div>
           <div>
-            <img src="../../static/images/icon_shijian.png">营业时间:<span class="van-timer-shop">{{ mapTime }}</span>
+            <img src="../../static/images/icon_shijian.png">营业时间:<span class="van-timer-shop">{{ mapList.businessHours }}</span>
           </div>
         </div>
       </van-cell-group>
@@ -112,13 +112,7 @@ export default {
   data() {
       return {
           value: 5,
-          mapName:sessionStorage.mapName,
-          mapDistance:sessionStorage.mapDistance,
-          mapAddress:sessionStorage.mapAddress,
-          mapLat:sessionStorage.mapLats,
-          mapLng:sessionStorage.mapLngs,
-          rootPic:sessionStorage.centerImg,
-          mapTime:sessionStorage.mapHour,
+          mapList:{},
           browser:{},
           mapSelect:["百度地图","高德地图","腾讯地图","苹果地图"],
           mapShow:false,
@@ -200,7 +194,7 @@ export default {
               pageNumber: this.pageNumber + 1
           };
           let self = this;
-          this.$axios.post("/res/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
+          this.$axios.post("/api/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
               // let data = JSON.parse(res.request.serviceStation.response)
               let serve = res.data.resData
               let datas = serve.myGoodsList;
@@ -228,13 +222,16 @@ export default {
               let data = {
                   pageNumber: self.pageNumber + 1
               };
-              this.$axios.post("/res/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
+              this.$axios.post("/api/shop/myGoods",qs.stringify({ "id":this.$route.query.list,"page":self.pageNumber,"rows":this.rows })).then(res=>{
                   console.log(res)
                   this.loadingText = "加载中"
                   let serve = res.data.resData
                   // let data = JSON.parse(res.request.serviceStation.response)
                   let datas = serve.myGoodsList;
+                  let maps = serve.myShop
                   self.list = self.list.concat(datas);
+                  self.mapList = maps;
+                  console.log(self.mapList)
                   self.totalPage = res.data.resData.goodsCount/this.rows;
                   self.loading = false; //关闭下拉刷新效果
                   self.pageNumber++;
