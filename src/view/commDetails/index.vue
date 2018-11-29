@@ -62,7 +62,8 @@
         data() {
             return {
                 value:1,
-                id:sessionStorage.shopIndexId,
+                id:this.$route.query.shopindex,
+                shopId:this.$route.query.shopId,
                 goodsName:null,
                 inventory:null,
                 price:null,
@@ -82,7 +83,7 @@
                     this.$router.push({name:'login'})
                 }else {
                     this.$router.push({name:'commodityDetails'})
-                    this.$router.push({name:'smenu',query:{value:this.value}})
+                    this.$router.push({name:'smenu',query:{value:this.value,shopId:this.shopId}})
                     this.obj = JSON.stringify(this.obj)
                     sessionStorage.obj = this.obj
                 }

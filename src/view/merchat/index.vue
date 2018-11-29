@@ -247,7 +247,7 @@ export default {
       details(index) {
           sessionStorage.shopIndexId = this.list[index].id
           sessionStorage.shopPic = 'http://47.99.140.207:8081/'+this.list[index].picture
-          this.$router.push({name:'commodityDetails',query:this.list[index].id})
+          this.$router.push({name:'commodityDetails',query:{shopindex:this.list[index].id,shopId:this.list[index].shopId}})
       }
   }
 };
